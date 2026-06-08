@@ -11,19 +11,24 @@ class Card:
     def suit(self):
         return self._suit
 
-    def _str(self):
+    def __str__(self):
         return f"{self._value}{self._suit}"
 class Deck:
     def __init__(self, num_of_decs=4):
         self._cards = []
         self._num_of_decs = num_of_decs
+        self.reset_deck()
+
     def reset_deck(self):
+        import random
+        self._cards = []
         values = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"]
         suits = ["H","D","C","S"]
         for i in range(self._num_of_decs):
             for value in values:
                 for suit in suits:
                     self._cards.append(Card(value,suit))
+        random.shuffle(self._cards)
     def draw_card(self):
         if len(self._cards) == 0:
             raise Exception("Deck is empty")
@@ -44,6 +49,8 @@ class Hand:
     def add_card(self, card):
         self._cards.append(card)
         self._score = self._calculate_score()
+    def is_bust(self):
+        return self._score > 21
     def _calculate_score(self):
         total = 0
         aces = 0
